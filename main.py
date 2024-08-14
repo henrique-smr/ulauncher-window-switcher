@@ -74,7 +74,7 @@ class KeywordQueryEventListener(EventListener):
             return RenderResultListAction(items)
 
         items.append(ExtensionResultItem(
-            icon='images/icon.png',
+            icon='images/window.svg',
             name='Search for a window by name',
             description=f'Try searching for something longer than {MIN_LEN_TO_SEARCH} characters'
         ))

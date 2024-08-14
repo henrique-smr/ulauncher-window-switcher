@@ -57,7 +57,7 @@ class KeywordQueryEventListener(EventListener):
                         stdout=subprocess.PIPE
                     ).stdout.read().decode()
 
-                    icon_name = windowsname.split()[0]
+                    icon_name = window["wm_class_instance"]
 
                     icon_theme = Gtk.IconTheme.get_default()
 

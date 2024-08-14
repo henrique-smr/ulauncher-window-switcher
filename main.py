@@ -23,7 +23,7 @@ class ZLikeWindowSwitcherExtension(Extension):
 class KeywordQueryEventListener(EventListener):
 
     def on_event(self, event, extension):
-        MIN_LEN_TO_SEARCH = 2
+        MIN_LEN_TO_SEARCH = 0
         items = []
         windows = []
 

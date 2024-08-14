@@ -25,20 +25,20 @@ class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
         MIN_LEN_TO_SEARCH = 2
         items = []
-        items = []
+        windows = []
 
         text = event.get_argument() or ''
 
         if len(text) >= MIN_LEN_TO_SEARCH:
-            items_str =  subprocess.Popen(
+            windows_str =  subprocess.Popen(
                 f'gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.List | sed -E -e "s/^\(\'//" -e "s/\',\)$//" | jq .',
                 shell=True,
                 stdout=subprocess.PIPE
             ).stdout.read().decode()
 
-            items = json.loads(items_str)
+            windows = json.loads(windows_str)
 
-            if len(items) == 0:
+            if len(windows) == 0:
                 items.append(
                     ExtensionResultItem(
                         icon='images/not_found.png',
@@ -49,10 +49,10 @@ class KeywordQueryEventListener(EventListener):
                 )
                 return RenderResultListAction(items)
 
-            for item in items:
-                if item["id"]:
+            for window in windows:
+                if window["id"]:
                     windowsname = subprocess.Popen(
-                        f'gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.GetTitle {item["id"]} | sed -E -e "s/^\(\'//" -e "s/\',\)$//" ',
+                        f'gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.GetTitle {window["id"]} | sed -E -e "s/^\(\'//" -e "s/\',\)$//" ',
                         shell=True,
                         stdout=subprocess.PIPE
                     ).stdout.read().decode()
@@ -71,7 +71,7 @@ class KeywordQueryEventListener(EventListener):
                     items.append(ExtensionResultItem(
                         icon=icon_path,
                         name='Open ' + windowsname,
-                        on_enter=ExtensionCustomAction(item["wm_class_instance"], keep_app_open=True)
+                        on_enter=ExtensionCustomAction(window["wm_class_instance"], keep_app_open=True)
                     ))
             return RenderResultListAction(items)
 

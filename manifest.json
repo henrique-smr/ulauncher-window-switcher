@@ -3,7 +3,7 @@
   "name": "Window Switcher extension",
   "description": "Another Z-like Window Switcher extension",
   "developer_name": "João Trepichio",
-  "icon": "images/icon.png",
+  "icon": "images/window.svg",
   "options": {
     "query_debounce": 0.01
   },

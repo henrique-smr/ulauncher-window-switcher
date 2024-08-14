@@ -29,7 +29,7 @@ class KeywordQueryEventListener(EventListener):
         text = event.get_argument() or ''
 
         if len(text) >= MIN_LEN_TO_SEARCH:
-            pids =  subprocess.Popen(f'xdotool search --onlyvisible "{text}"',
+            pids =  subprocess.Popen(f'gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.List | sed -E -e "s/^\(\'//" -e "s/\',\)$//" | jq \'.[].id\'',
                 shell=True,
                 stdout=subprocess.PIPE
             ).stdout.read().decode()
@@ -50,7 +50,7 @@ class KeywordQueryEventListener(EventListener):
             for pid in pid_list:
                 if pid:
                     windowsname = subprocess.Popen(
-                        'xdotool getwindowname ' + pid,
+                        f'gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.GetTitle {pid} | sed -E -e "s/^\(\'//" -e "s/\',\)$//" ',
                         shell=True,
                         stdout=subprocess.PIPE
                     ).stdout.read().decode()
